@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Карусель відгуків | STEM Academy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #e8e5ff 0%, #f8f7ff 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      flex-direction: column;
+    }
+
+    .reviews-section {
+      padding: 60px 40px;
+      background: linear-gradient(135deg, #e8e5ff 0%, #f8f7ff 100%);
+      position: relative;
+      border-radius: 30px;
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .reviews-title {
+      text-align: center;
+      margin-bottom: 50px;
+      animation: slideInUp 0.8s ease-out;
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .reviews-title h2 {
+      font-size: 2.8em;
+      color: #22223b;
+      margin-bottom: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .reviews-title p {
+      font-size: 1.1em;
+      color: #999;
+      opacity: 0.9;
+    }
+
+    .carousel-wrapper-outer {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .carousel-container {
+      max-width: 1000px;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      border-radius: 20px;
+    }
+
+    .carousel-wrapper {
+      display: flex;
+      transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .review-card {
+      min-width: 100%;
+      background: #fff;
+      padding: 50px 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(102, 82, 205, 0.1);
+      animation: fadeInCard 0.6s ease-out;
+    }
+
+    @keyframes fadeInCard {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .review-text {
+      color: #333;
+      font-size: 1.15em;
+      line-height: 1.8;
+      margin-bottom: 25px;
+      font-weight: 500;
+    }
+
+    .review-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .review-author {
+      color: #6846f7;
+      font-weight: 700;
+      font-size: 1em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .review-stars {
+      color: #ffc107;
+      font-size: 1.2em;
+      letter-spacing: 2px;
+    }
+
+    /* КНОПКИ НАВІГАЦІЇ */
+    .carousel-btn {
+      position: relative;
+      background: #6846f7;
+      color: #fff;
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 4px 15px rgba(102, 82, 205, 0.3);
+      flex-shrink: 0;
+    }
+
+    .carousel-btn:hover {
+      background: #5f3be6;
+      transform: scale(1.1);
+      box-shadow: 0 8px 25px rgba(102, 82, 205, 0.5);
+    }
+
+    .carousel-btn:active {
+      transform: scale(0.95);
+    }
+
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 35px;
+      animation: fadeIn 1s ease-out 0.5s both;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .dot:hover {
+      background: #b8b3d5;
+    }
+
+    .dot.active {
+      background: #6846f7;
+      width: 35px;
+      border-radius: 6px;
+    }
+
+    /* 🔥 ОБʼЄМНА 3D КНОПКА ДОМУ ПО ЦЕНТРУ */
+    .home-btn {
+      position: fixed;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #ffffff, #d9d9d9);
+      box-shadow: 8px 8px 18px #b8b8b8, -8px -8px 18px #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: 0.25s;
+      z-index: 999;
+    }
+
+    .home-btn:hover {
+      transform: translateX(-50%) scale(1.1);
+      box-shadow: 10px 10px 22px #b6b6b6, -10px -10px 22px #ffffff;
+    }
+
+    /* 3D ІКОНКА ДОМУ */
+    .home-icon {
+      width: 35px;
+      height: 35px;
+      background: linear-gradient(145deg, #ff7e47, #d05a2e);
+      clip-path: polygon(50% 0%, 100% 35%, 100% 100%, 0% 100%, 0% 35%);
+      box-shadow: inset 3px 3px 6px rgba(0,0,0,0.25),
+                  inset -3px -3px 6px rgba(255,255,255,0.55);
+      border-radius: 6px;
+      position: relative;
+    }
+
+    .home-icon::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 14px;
+      height: 14px;
+      background: #ffffff;
+      border-radius: 3px;
+      box-shadow: inset 2px 2px 4px rgba(0,0,0,0.25),
+                  inset -2px -2px 4px rgba(255,255,255,0.6);
+    }
+
+    @media (max-width: 768px) {
+      .reviews-section { padding: 40px 20px; }
+      .reviews-title h2 { font-size: 2em; }
+      .review-card { padding: 30px 20px; }
+      .review-text { font-size: 1em; }
+      .carousel-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+      }
+      .carousel-wrapper-outer {
+        gap: 10px;
+      }
+      .home-btn {
+        width: 60px;
+        height: 60px;
+      }
+      .home-icon {
+        width: 30px;
+        height: 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <section class="reviews-section" id="reviews">
+    <div class="reviews-title">
+      <h2>💬 Відгуки батьків</h2>
+      <p>Те, що кажуть батьки про мої курси</p>
+    </div>
+
+    <div class="carousel-wrapper-outer">
+      <button class="carousel-btn" id="prevBtn" title="Попередній">❮</button>
+
+      <div class="carousel-container">
+        <div class="carousel-wrapper" id="carouselWrapper">
+
+          <!-- ВСІ твої картки — без змін -->
+          <div class="review-card">
+            <div class="review-text">"Валику конечно с Вами интереснее, чем в цирке, сидит причина, что я урок отменила 😊 "</div>
+            <div class="review-footer"><div class="review-author">👤 Мама учня</div><div class="review-stars">⭐⭐⭐⭐⭐</div></div>
+          </div>
+
+          <div class="review-card">
+            <div class="review-text">"Мама там на дії відсотків задоволена уроком, каже весь час шукали 'нестандартного підходу' від викладача."</div>
+            <div class="review-footer"><div class="review-author">👤 Батьки учениці</div><div class="review-stars">⭐⭐⭐⭐⭐</div></div>
+          </div>
+
+          <div class="review-card">
+            <div class="review-text">"Розмова тривала 20 хвилин і 10 з них, вона тебе хвалила 😂"</div>
+            <div class="review-footer"><div class="review-author">👤 Мама учениці</div><div class="review-stars">⭐⭐⭐⭐⭐</div></div>
+          </div>
+
+          <div class="review-card">
+            <div class="review-text">"Еві дуже сподобався урок, вона визжала і стрибала від радості. Буде займатись!"</div>
+            <div class="review-footer"><div class="review-author">👤 Батьки учениці</div><div class="review-stars">⭐⭐⭐⭐⭐</div></div>
+          </div>
+
+          <div class="review-card">
+            <div class="review-text">"Разом з тобою далі бажає навчатися новий учень — Домінік 🙌"</div>
+            <div class="review-footer"><div class="review-author">👤 Матір учня</div><div class="review-stars">⭐⭐⭐⭐⭐</div></div>
+          </div>
+
+          <div class="review-card">
+            <div class="review-text">"Мамі дуже сподобався викладач, передала подяку за пробний урок. З радістю продовжують навчання!"</div>
+            <div class="review-footer"><div class="review-author">👤 Батьки учня</div><div class="review-stars">⭐⭐⭐⭐⭐</div></div>
+          </div>
+
+        </div>
+      </div>
+
+      <button class="carousel-btn" id="nextBtn" title="Наступний">❯</button>
+    </div>
+
+    <div class="carousel-dots" id="carouselDots"></div>
+  </section>
+
+  <!-- 🔥 3D КНОПКА ДОМУ ПО ЦЕНТРУ -->
+  <a href="index.html" class="home-btn">
+    <div class="home-icon"></div>
+  </a>
+
+  <script>
+    let currentSlide = 0;
+    const totalSlides = document.querySelectorAll('.review-card').length;
+    const carouselWrapper = document.getElementById('carouselWrapper');
+    const carouselDots = document.getElementById('carouselDots');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    // Створення точок
+    for (let i = 0; i < totalSlides; i++) {
+      const dot = document.createElement('div');
+      dot.className = `dot ${i === 0 ? 'active' : ''}`;
+      dot.addEventListener('click', () => goToSlide(i));
+      carouselDots.appendChild(dot);
+    }
+
+    function goToSlide(n) {
+      currentSlide = n;
+      carouselWrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
+      
+      document.querySelectorAll('.dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentSlide);
+      });
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % totalSlides;
+      goToSlide(currentSlide);
+    }
+
+    function prevSlide() {
+      currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+      goToSlide(currentSlide);
+    }
+
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+
+    // Автоматичне переключення кожні 5 секунд
+    setInterval(nextSlide, 5000);
+  </script>
+
+</body>
+</html>

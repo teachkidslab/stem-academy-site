@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>STEM Academy | Курси для дітей</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family:'Montserrat', Arial,sans-serif;
+      background:linear-gradient(120deg,#8358ec 0%,#53cbf1 100%);
+      margin:0;
+      color:#fff;
+      box-sizing:border-box;
+      min-height:100vh;
+    }
+    .main-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 13px;
+      font-size: 3em;
+      font-weight: 900;
+      color: #fff;
+      margin-top: 38px;
+      margin-bottom: 11px;
+      letter-spacing: 2px;
+      text-shadow: 0 4px 14px rgba(54,54,160,0.17);
+    }
+    .subtitle {font-size: 1.42em;font-weight: 800;color: #f2f6ff;margin-bottom: 24px;text-align: center;}
+    .desc {font-size: 1.17em;color: #fff;font-weight: 700;opacity: 0.97;margin-bottom: 24px;text-align: center;letter-spacing: 0.5px;}
+    .header-buttons{display:flex; gap:15px; justify-content:center; margin-top:18px; flex-wrap:wrap; margin-bottom:22px;}
+    .btn{padding:13px 29px;font-size:1.04em; font-weight:700; border:none; border-radius:32px; cursor:pointer; transition:.27s; text-decoration:none; box-shadow:0 8px 26px rgba(40,52,220,0.08);}
+    .btn-primary{background:#fff;color:#655ad4;}
+    .btn-primary:hover{background:#f4f2ff;transform:translateY(-2px)scale(1.07);}
+    .btn-telegram{background:#0088cc;color:#fff;}
+    .btn-telegram:hover{background:#056ea6;}
+    .btn-reviews{background:#4dd9ff;color:#fff;}
+    .btn-reviews:hover{background:#0074a4;}
+    .hidden { display: none !important; }
+    .courses-section{
+      background:none;
+      padding:17px 12px 10px 12px;
+      max-width:1100px;
+      margin:0 auto 12px auto;
+    }
+    .courses-title{text-align:center;margin-bottom:18px;}
+    .courses-title h2{font-size:1.7em;font-weight:800;margin-bottom:7px;color:#fff;}
+    .courses-title p{font-size:0.98em;color:#e3e8f3;opacity:.89;}
+    .courses-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:10px;}
+    .course-tile{background:rgba(255,255,255,.88); box-shadow:0 8px 32px rgba(93,74,209,0.12); border-radius:20px; padding:16px 8px 11px 8px;
+      cursor:pointer;transition:.28s cubic-bezier(.34,1.56,.64,1);border:2px solid transparent;position:relative;color:#2a2356;}
+    .course-tile:hover{border-color:#8b8ff9;background:#eefeef;box-shadow:0 16px 54px rgba(44,124,255,0.17);}
+    .course-icon{font-size:1.55em;margin-bottom:5px;}
+    .course-name{font-size:1.06em;font-weight:700;margin-bottom:2px;}
+    .course-prices{display:flex;gap:7px;margin-top:3px;}
+    .price-uah, .price-usd {background: #ecebff;color: #292356;font-weight: 800; letter-spacing: 0.5px; border-radius: 10px; padding: 3px 7px;font-size: .98em;}
+    .price-usd {background: #e7f8fd;color: #155582;}
+    /* --- Modal --- */
+    .modal-bg{position:fixed;left:0;top:0;width:100vw;height:100vh;background:rgba(44,58,132,.45);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(7px);}
+    .modal-bg.active{display:flex!important;}
+    .modal-window{background:linear-gradient(135deg,#fff 0%,#f8f7ff 100%);padding:18px 18px 13px 18px;border-radius:24px;box-shadow:0 20px 60px rgba(35,44,90,0.13);max-width:430px;width:97vw;position:relative;color:#27275a;}
+    .close-btn{position:absolute;top:11px;right:17px;font-size:26px;cursor:pointer;color:#6c6cc0;background:none;border:none;transition:.22s;width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:50%;}
+    .close-btn:hover{background:rgba(102,82,205,0.12);}
+    .course-modal-wrap {
+      background: #f8f7ff;border-radius:18px;box-shadow: 0 13px 28px rgba(44,124,255,.07);padding:16px 15px 10px 15px;color:#27275a;font-size:1.05em;
+    }
+    .course-modal-title {display:flex;align-items:center;gap:10px;font-size:1.13em;font-weight:800;margin-bottom:8px;color:#4255b8;}
+    .course-modal-icon {font-size:1.6em;}
+    .course-modal-highlight {background:#e6f2fd;font-size:.99em;color:#165399;font-weight:600;padding:6px 14px;border-radius:9px;margin-bottom:10px;}
+    .course-modal-details {list-style:none;padding-left:0;margin:0;}
+    .course-modal-details li {border-bottom:1px solid #e3e8f3;margin-bottom:6px;padding-bottom:4px;font-size:0.98em;}
+    .course-modal-details li:last-child {border-bottom:none;}
+    .modal-price-usd {background:#e7f8fd;color:#155582 !important;font-weight:700;border-radius:7px;padding:2px 9px;margin-left:7px;font-size:.97em;}
+    /* --- Footer --- */
+    footer {
+      background: rgba(25,34,74,0.68);
+      color: #fff;
+      text-align: center;
+      padding: 10px 0 6px 0;
+      margin-top: 10px;
+      width: 100%;
+      font-size: 1em;
+      box-shadow: 0 0 12px rgba(40,52,220,0.03);
+      border-radius: 0;
+    }
+    .footer-telegram {
+      display: inline-block;
+      color: #f3f9ff;
+      background: #0088cc;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 10px;
+      padding: 7px 18px;
+      margin-left: 8px;
+      font-size: 1em;
+      box-shadow: 0 2px 8px rgba(40,52,220,0.09);
+      transition: background .2s;
+      vertical-align: middle;
+    }
+    .footer-telegram:hover { background: #056ea6; color: #fff; }
+    @media(max-width:600px){
+      .main-title {font-size:1.4em;}
+      .subtitle {font-size:1em;}
+      .desc {font-size:0.88em;}
+      .courses-title h2{font-size:0.92em;}
+      .courses-section{padding:7px;}
+      .course-tile{padding:7px 2px;}
+      .course-icon{font-size:0.9em;}
+      .course-modal-title{font-size:1em;}
+      .modal-window{padding:5px;}
+      .footer-telegram{padding:5px 10px;font-size:0.92em;}
+      footer{padding:7px 1px;}
+    }
+  </style>
+</head>
+<body>
+  <div class="main-title"><span class="main-emoji">🚀</span> <span class="main-label">STEM Academy</span></div>
+  <div class="subtitle">Курси програмування для дітей</div>
+  <div class="desc"><b>Minecraft</b> · <b>Roblox</b> · <b>Scratch</b> · <b>Python</b> · <b>JavaScript</b> · <b>Fullstack</b> · <b>ШІ</b> · <b>Computer Science</b></div>
+  <div class="header-buttons">
+    <a href="#courses" class="btn btn-primary" id="showCoursesBtn">Обрати курс</a>
+    <a href="reviews.html" class="btn btn-reviews" id="openReviews">Відгуки</a>
+    <a href="https://t.me/teachergeek" target="_blank" class="btn btn-telegram">Зв'язок у Telegram</a>
+  </div>
+  <!-- Секція курсів початково прихована -->
+  <section class="courses-section hidden" id="coursesSection">
+    <div class="courses-title">
+      <h2>Наші курси</h2>
+      <p>Обирайте напрямок навчання під керівництвом досвідчених викладачів!</p>
+    </div>
+    <div class="courses-grid">
+      <div class="course-tile" data-course="minecraft"><div class="course-icon">🟩</div><div class="course-name">Minecraft Education</div><div class="course-prices"><span class="price-uah">500 грн</span><span class="price-usd">12$</span></div></div>
+      <div class="course-tile" data-course="roblox"><div class="course-icon">🛡️</div><div class="course-name">Roblox Studio</div><div class="course-prices"><span class="price-uah">500 грн</span><span class="price-usd">12$</span></div></div>
+      <div class="course-tile" data-course="scratch"><div class="course-icon">🔎</div><div class="course-name">Scratch</div><div class="course-prices"><span class="price-uah">450 грн</span><span class="price-usd">11$</span></div></div>
+      <div class="course-tile" data-course="python"><div class="course-icon">🐍</div><div class="course-name">Python</div><div class="course-prices"><span class="price-uah">500 грн</span><span class="price-usd">12$</span></div></div>
+      <div class="course-tile" data-course="js"><div class="course-icon">💻</div><div class="course-name">JavaScript</div><div class="course-prices"><span class="price-uah">500 грн</span><span class="price-usd">12$</span></div></div>
+      <div class="course-tile" data-course="fullstack"><div class="course-icon">⭐</div><div class="course-name">Fullstack Junior</div><div class="course-prices"><span class="price-uah">550 грн</span><span class="price-usd">13$</span></div></div>
+      <div class="course-tile" data-course="ai"><div class="course-icon">🤖</div><div class="course-name">Штучний Інтелект (AI)</div><div class="course-prices"><span class="price-uah">550 грн</span><span class="price-usd">13$</span></div></div>
+      <div class="course-tile" data-course="cs"><div class="course-icon">📘</div><div class="course-name">Computer Science</div><div class="course-prices"><span class="price-uah">550 грн</span><span class="price-usd">13$</span></div></div>
+    </div>
+  </section>
+  <!-- Модальне вікно -->
+  <div class="modal-bg" id="modalBg">
+    <div class="modal-window" id="modalWindow">
+      <button class="close-btn" id="closeBtn" title="Закрити">&times;</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+  <footer>
+    &copy; 2025 STEM Academy ·
+    <a href="https://t.me/teachergeek" target="_blank" class="footer-telegram">Написати в Telegram</a>
+  </footer>
+  <script>
+    document.getElementById('showCoursesBtn').onclick = function(e){
+      e.preventDefault();
+      document.getElementById('coursesSection').classList.remove('hidden');
+      document.getElementById('coursesSection').scrollIntoView({behavior:'smooth'});
+    };
+    // Курси з новими цінами
+    const courses = {
+      minecraft: {
+        icon: "🟩", title: "Minecraft Education",
+        highlight: "Для дітей, які хочуть досліджувати 3D світ, програмувати через ігрові механіки Minecraft.",
+        price_uah: "500 грн", price_usd: "12$",
+        age: "від 6 років", lessons: "36 уроків по 60 хв.",
+        teacher: "Веретенніков Владислав Володимирович, філолог, досвідчений викладач програмування та Computer Science",
+        format: "ONLINE", method: "Проектний підхід, інтерактивні вправи, ігри",
+        result: "Створення власних ігор/модів у Minecraft, портфоліо, робота в команді.", payment: "на карту чи криптогаманець", materials: "Особиста Miro дошка + домашні завдання", support: "Індивідуальна підтримка кожного клієнта"
+      },
+      roblox: {
+        icon: "🛡️", title: "Roblox Studio",
+        highlight: "Для творчих дітей, які мріють створювати унікальні ігри у Roblox.",
+        price_uah: "500 грн", price_usd: "12$",
+        age: "від 7 років", lessons: "36 уроків по 60 хв.",
+        teacher: "Веретенніков Владислав Володимирович, філолог, досвідчений викладач програмування та Computer Science",
+        format: "ONLINE", method: "Покрокове моделювання, інтерактивні вправи, створення багатокористувацьких ігор",
+        result: "Розробка проєктів у Roblox, портфоліо.", payment: "на карту чи криптогаманець", materials: "Особиста Miro дошка + завдання", support: "Індивідуальна підтримка кожного клієнта"
+      },
+      scratch: {
+        icon: "🔎", title: "Scratch",
+        highlight: "Ідеально для наймолодших — творчість та логіка через прості ігри.",
+        price_uah: "450 грн", price_usd: "11$",
+        age: "від 6 років", lessons: "36 уроків по 60 хв.",
+        teacher: "Веретенніков Владислав Володимирович", format: "ONLINE",
+        method: "Візуальне програмування, ігрові завдання",
+        result: "Створення власних анімованих історій, ігор та презентацій.", payment: "на карту чи криптогаманець", materials: "Домашні завдання, Miro дошка", support: "Підтримка кожного учня"
+      },
+      python: {
+        icon: "🐍", title: "Python",
+        highlight: "Для дітей, які хочуть опанувати одну з найпопулярніших мов сучасності!",
+        price_uah: "500 грн", price_usd: "12$",
+        age: "від 8 років", lessons: "36 уроків по 60 хв.",
+        teacher: "Веретенніков Владислав Володимирович", format: "ONLINE",
+        method: "Проектні завдання, кодінг у реальному часі",
+        result: "Навчання написанню власних програм, команда.", payment: "на карту чи криптогаманець", materials: "Miro дошка, домашні завдання", support: "Індивідуальна підтримка"
+      },
+      js: {
+        icon: "💻", title: "JavaScript",
+        highlight: "Показує світ веб-сайтів, інтерфейсів і інтерактивних додатків.",
+        price_uah: "500 грн", price_usd: "12$",
+        age: "від 10 років", lessons: "36 уроків по 60 хв.",
+        teacher: "Веретенніков Владислав Володимирович", format: "ONLINE",
+        method: "Практична JS-розробка, проекти, кодінг у реальному часі",
+        result: "Інтерактивні сайти, ігри, портфоліо.", payment: "на карту чи криптогаманець", materials: "Miro дошка, домашні завдання", support: "Індивідуальна підтримка"
+      },
+      fullstack: {
+        icon: "⭐", title: "Fullstack Junior",
+        highlight: "Для старших — від дизайну до серверного коду.",
+        price_uah: "550 грн", price_usd: "13$",
+        age: "від 12 років", lessons: "36 уроків по 60 хв.",
+        teacher: "Веретенніков Владислав Володимирович", format: "ONLINE",
+        method: "Fullstack-проекти, сучасні технології, робота в команді",
+        result: "Веб-сайти, backend, frontend, IT-портфоліо.", payment: "на карту чи криптогаманець", materials: "Miro дошка, домашні завдання", support: "Індивідуальна підтримка"
+      },
+      ai: {
+        icon: "🤖", title: "Штучний Інтелект (AI)",
+        highlight: "Для тих, хто хоче створювати розумні проекти з AI.",
+        price_uah: "550 грн", price_usd: "13$",
+        age: "від 12 років", lessons: "36 уроків по 60 хв.",
+        teacher: "Веретенніков Владислав Володимирович", format: "ONLINE",
+        method: "Проекти, знайомство з AI-технологіями",
+        result: "Боти, системи, AI-портфоліо.", payment: "на карту чи криптогаманець", materials: "Miro дошка, домашні завдання", support: "Індивідуальна підтримка"
+      },
+      cs: {
+        icon: "📘", title: "Computer Science",
+        highlight: "Основи алгоритмів, логіки, технологій майбутнього.",
+        price_uah: "550 грн", price_usd: "13$",
+        age: "від 10 років", lessons: "36 уроків по 60 хв.",
+        teacher: "Веретенніков Владислав Володимирович, філолог, викладач програмування та CS", format: "ONLINE",
+        method: "Інтерактив, задачі, міні-проекти",
+        result: "ІТ-задачі, розуміння комп’ютерних систем, власні проекти.", payment: "на карту чи криптогаманець", materials: "Miro дошка, презентації, домашні завдання", support: "Індивідуальна підтримка кожного учня"
+      }
+    };
+    document.querySelectorAll('.course-tile').forEach(tile => {
+      tile.addEventListener('click', () => {
+        const course = courses[tile.dataset.course];
+        document.getElementById('modalContent').innerHTML = `
+          <div class="course-modal-wrap">
+            <div class="course-modal-title">
+              <span class="course-modal-icon">${course.icon}</span>
+              <span>${course.title}</span>
+            </div>
+            <div class="course-modal-highlight">${course.highlight}</div>
+            <ul class="course-modal-details">
+              <li><b>💰 Вартість:</b> ${course.price_uah} <span class="modal-price-usd">${course.price_usd}</span></li>
+              <li><b>⏳ Тривалість заняття:</b> 60 хвилин</li>
+              <li><b>📅 Занять у курсі:</b> ${course.lessons}</li>
+              <li><b>🎯 Вік:</b> ${course.age}</li>
+              <li><b>🖥️ Формат:</b> ${course.format}</li>
+              <li><b>👨‍🏫 Викладач:</b> ${course.teacher}</li>
+              <li><b>🎮 Методи:</b> ${course.method}</li>
+              <li><b>🏆 Результати:</b> ${course.result}</li>
+              <li><b>💸 Оплата:</b> ${course.payment}</li>
+              <li><b>📋 Матеріали:</b> ${course.materials}</li>
+              <li><b>🤝 Підтримка:</b> ${course.support}</li>
+            </ul>
+          </div>
+        `;
+        document.getElementById('modalBg').classList.add('active');
+      });
+    });
+    document.getElementById('closeBtn').onclick = () => document.getElementById('modalBg').classList.remove('active');
+    document.getElementById('modalBg').onclick = e => { if(e.target===e.currentTarget)document.getElementById('modalBg').classList.remove('active'); };
+  </script>
+</body>
+</html>
