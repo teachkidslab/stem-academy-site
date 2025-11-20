@@ -11,17 +11,21 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
     <style>
+        /* --- ВИПРАВЛЕННЯ 1: Глобальне налаштування для коректних розмірів --- */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Montserrat', Arial, sans-serif;
             background: linear-gradient(120deg, #8358ec 0%, #53cbf1 100%);
             margin: 0;
             color: #fff;
-            box-sizing: border-box;
+            /* box-sizing: border-box; -- перенесено в глобальний селектор * вище */
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            /* ЗМІНЕНО: justify-content: center; на flex-start */
-            justify-content: flex-start;
+            justify-content: center;
             overflow-x: hidden;
             overflow-y: auto;
             position: relative;
@@ -151,27 +155,31 @@
                 box-shadow: 0 0 0 0 rgba(255, 193, 7, 0);
             }
         }
-        /* Кнопка "На початок" - новий стиль та розміщення */
-        #backToTop {
+        
+        /* --- ВИПРАВЛЕННЯ 2: Кнопка Закрити меню --- */
+        #closeMenu {
             display: none;
-            margin: 10px auto 70px auto; /* ЗБІЛЬШИЛИ bottom margin до 70px, щоб не заїжджала під футер */
-            padding: 8px 20px;
-            font-size: 0.9em;
-            border-radius: 20px;
+            /* Змінено margin-bottom на 60px, щоб підняти кнопку вище від футера */
+            margin: 30px auto 60px auto;
+            padding: 12px 30px;
+            font-size: 1.06em;
+            border-radius: 32px;
             font-weight: 700;
-            background: #fff;
+            background: rgba(255, 255, 255, 0.9);
             color: #5b53d9;
             border: none;
             cursor: pointer;
-            transition: .25s;
-            text-decoration: none;
-            width: fit-content;
-            animation: fadeIn 0.5s ease-out;
+            transition: .3s;
+            animation: fadeInUp 0.5s ease-out;
+            box-shadow: 0 8px 26px rgba(40, 52, 220, 0.08);
         }
-        #backToTop:hover {
-            background: #f0edff;
-            transform: translateY(-2px);
+        #closeMenu:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-2px) scale(1.05);
         }
+        
+        /* Кнопка "На початок" видалена зі стилів */
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -215,7 +223,11 @@
         }
         .courses-section {
             background: none;
-            padding: 17px 0 10px 0;
+            /* ВИДАЛЕНО: padding: 17px 12px 10px 12px; */
+            /* Замінено на: */
+            padding: 17px 0 10px 0; /* Прибрали горизонтальні відступи */
+            /* max-width:1100px; */
+            /* ВИДАЛЕНО: щоб фон заповнював усю ширину */
             margin: 0 auto 12px auto;
             padding-bottom: 80px;
         }
@@ -237,12 +249,17 @@
         }
         .courses-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            /* ВИДАЛЕНО: grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); */
+            /* Замінено на: */
+            grid-template-columns: repeat(4, 1fr); /* 4 стовпці для всіх екранів */
             gap: 16px;
             margin-top: 10px;
             width: 100%;
-            padding: 0;
+            /* ВИДАЛЕНО: padding: 0 12px; */
+            /* Прибрали горизонтальні відступи */
+            padding: 0; /* Прибрали горизонтальні відступи */
         }
+        /* Додано width: 100% */
         .course-tile {
             background: rgba(255, 255, 255, .88);
             box-shadow: 0 8px 32px rgba(93, 74, 209, 0.12);
@@ -257,6 +274,7 @@
             transform: translateY(20px);
             animation: slideInUp 0.5s ease-out forwards;
         }
+        /* Анімація для кожної плитки з затримкою */
         .course-tile:nth-child(1) {
             animation-delay: 0.1s;
         }
@@ -301,8 +319,6 @@
             margin-top: 3px;
             align-items: center;
             justify-content: space-between;
-            /* ДОДАНО: для мобільних пристроїв */
-            flex-wrap: wrap;
         }
         .price-uah,
         .price-usd {
@@ -320,7 +336,7 @@
         }
         /* Нова кнопка "Сплатити в Telegram" */
         .pay-btn {
-            background: linear-gradient(135deg, #a08aff 0%, #8c6eff 100%);
+            background: linear-gradient(135deg, #c9b4ff 0%, #a08aff 100%); /* Світліший градієнт */
             color: white;
             padding: 5px 10px;
             font-size: 0.85em;
@@ -329,14 +345,14 @@
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 4px 10px rgba(160, 138, 255, 0.3);
+            box-shadow: 0 4px 10px rgba(160, 138, 255, 0.2); /* Зменшено прозорість тіні */
             text-decoration: none;
             display: inline-block;
             text-align: center;
         }
         .pay-btn:hover {
-            background: linear-gradient(135deg, #8c6eff 0%, #7a5aff 100%);
-            box-shadow: 0 6px 15px rgba(160, 138, 255, 0.4);
+            background: linear-gradient(135deg, #a08aff 0%, #8c6eff 100%); /* Темніший градієнт при наведенні */
+            box-shadow: 0 6px 15px rgba(160, 138, 255, 0.3); /* Збільшено прозорість тіні при наведенні */
             transform: translateY(-1px);
         }
         /* Інформаційна кнопка (іконка "i") - зроблена об'ємною, з пульсацією та хвилею */
@@ -390,6 +406,7 @@
             border-radius: 20px;
             max-width: 800px;
             margin: 30px auto 40px auto;
+            /* ЗМІНЕНО: Додано margin-bottom: 40px для відступу від футера */
             text-align: center;
             opacity: 0;
             transform: translateY(20px);
@@ -890,11 +907,15 @@
         @media(max-width:1023px) {
             .courses-section {
                 padding: 17px 20px 10px 20px;
+                /* Збільшуємо горизонтальний відступ для планшетів */
             }
             .courses-grid {
                 grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                /* Зменшуємо мінімальну ширину плитки */
             }
         }
+        
+        /* --- ВИПРАВЛЕННЯ 3: Мобільна адаптація --- */
         @media(max-width:767px) {
             .main-title {
                 font-size: 1.4em;
@@ -905,6 +926,7 @@
             .desc {
                 font-size: 0.88em;
             }
+            /* Для мобільних пристроїв зменшуємо розмір надпису */
             .courses-title h2 {
                 font-size: 0.92em;
             }
@@ -920,9 +942,12 @@
             .about-section p {
                 font-size: 0.95em;
             }
+            
+            /* Більше відступів у плитці */
             .course-tile {
-                padding: 7px 2px;
+                padding: 15px 12px;
             }
+            
             .course-icon {
                 font-size: 0.9em;
             }
@@ -939,6 +964,7 @@
             footer {
                 padding: 7px 1px;
             }
+            /* Адаптація для мобільних пристроїв */
             .check-prices-modal-window {
                 padding: 16px;
             }
@@ -958,35 +984,53 @@
             .promo-btn {
                 margin-top: 10px;
             }
+            
+            /* Вирівнювання цін і кнопок */
             .course-prices {
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: center;
+                gap: 10px;
+                width: 100%;
             }
+            /* Кнопка на всю ширину з відступами */
             .pay-btn {
                 width: 100%;
-                padding: 6px 10px;
-                font-size: 0.8em;
+                padding: 10px 0;
+                font-size: 0.9em;
+                display: block;
+                text-align: center;
+                margin-top: 5px;
             }
-            /* Кнопка "На початок" для мобільних */
-            #backToTop {
-                margin: 10px auto 60px auto;
-                padding: 6px 16px;
-                font-size: 0.8em;
+            
+            /* Кнопка "Закрити меню" для мобільних - ще більше піднімаємо */
+            #closeMenu {
+                padding: 10px 24px;
+                font-size: 0.95em;
+                margin: 20px auto 70px auto; /* 70px знизу */
             }
         }
         @media(min-width:1024px) {
             .courses-section {
-                padding: 17px 0 10px 0;
+                /* ВИДАЛЕНО: padding: 17px 20px 10px 20px; */
+                /* Замінено на: */
+                padding: 17px 0 10px 0; /* Прибрали горизонтальні відступи */
+                /* Збільшуємо горизонтальний відступ для ПК */
             }
             .courses-grid {
-                grid-template-columns: repeat(4, 1fr);
+                /* ВИДАЛЕНО: grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); */
+                /* Замінено на: */
+                grid-template-columns: repeat(4, 1fr); /* 4 стовпці для ПК */
                 gap: 20px;
-                padding: 0;
+                /* Збільшуємо проміжок між плитками */
+                /* ВИДАЛЕНО: padding: 0 20px; */
+                /* Прибрали горизонтальні відступи */
+                padding: 0; /* Прибрали горизонтальні відступи */
             }
-            #backToTop {
-                margin: 10px auto 70px auto;
-                padding: 8px 20px;
-                font-size: 0.9em;
+            /* Кнопка "Закрити меню" для ПК */
+            #closeMenu {
+                padding: 12px 30px;
+                font-size: 1.06em;
+                margin: 30px auto 60px auto; /* Підняли і на десктопі */
             }
         }
     </style>
@@ -1113,8 +1157,11 @@
             </div>
         </div>
     </section>
-    <!-- Кнопка "На початок" переміщена сюди, під усі плитки -->
-    <a href="#" id="backToTop" class="btn">На початок</a>
+    
+    <!-- --- ВИПРАВЛЕННЯ 4: Залишилась тільки кнопка "Закрити меню" --- -->
+    <button id="closeMenu">Закрити меню</button>
+    <!-- Кнопка "На початок" видалена -->
+    
     <!-- Модальне вікно БОНУСА -->
     <div class="bonus-modal-bg" id="bonusModalBg">
         <div class="bonus-modal-window" id="bonusModalWindow">
@@ -1184,21 +1231,18 @@
             e.preventDefault();
             const sec = document.getElementById('coursesSection');
             sec.classList.remove('hidden');
-            document.getElementById('backToTop').style.display = 'block';
+            document.getElementById('closeMenu').style.display = 'block';
+            // Видалено відображення backToTop
             sec.scrollIntoView({behavior:'smooth'});
         };
-        // Повернутися на початок
-        document.getElementById('backToTop').onclick = function(e){
-            e.preventDefault();
-            // Ховаємо секцію курсів та саму кнопку "На початок"
+        // Закрити меню курсів
+        document.getElementById('closeMenu').onclick = function(){
             document.getElementById('coursesSection').classList.add('hidden');
             this.style.display = 'none';
-            // Плавно скролимо на верх
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+            // Видалено приховування backToTop
         };
+        // Логіка кнопки "На початок" видалена
+        
         // Дані курсів (залишилися без змін)
         const courses = {
             minecraft: {
